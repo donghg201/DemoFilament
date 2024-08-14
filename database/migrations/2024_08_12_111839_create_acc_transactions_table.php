@@ -11,15 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('acc__transactions', function (Blueprint $table) {
+        Schema::create('acc_transactions', function (Blueprint $table) {
             $table->id();
             $table->integer('Txn_Id')->unique();
             $table->float('Amount');
             $table->timestamp('Funds_Avail_Date');
             $table->timestamp('Txn_Date');
+            $table->string('Txn_Type_Id');
             $table->foreignId('Account_Id')->constrained('Account')->onUpdate('cascade')->onDelete('cascade');
-            $table->integer('Execution_Branch_Id')->nullable();
-            $table->integer('Teller_Emp_Id')->nullable();
+            $table->integer('Execution_Branch_Id')->constrained('Branch');
+            $table->integer('Teller_Emp_Id')->constrained('Employee');
             $table->timestamps();
         });
     }

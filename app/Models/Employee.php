@@ -26,8 +26,13 @@ class Employee extends Model
         return $this->belongsTo(Account::class, 'Open_Emp_Id');
     }
 
+    public function accTransaction()
+    {
+        return $this->belongsTo(AccTransaction::class, 'Teller_Emp_Id');
+    }
+
     public function department()
     {
-        return $this->hasOne(Department::class, 'Dept_Id');
+        return $this->hasMany(Department::class, 'Dept_Id');
     }
 }

@@ -24,6 +24,6 @@ class Product extends Model
 
     public function productId()
     {
-        return $this->hasOne(Product_Type::class, 'Product_Type_Id');
+        return $this->hasMany(Product_Type::class, 'Product_Type_Id');
     }
 }

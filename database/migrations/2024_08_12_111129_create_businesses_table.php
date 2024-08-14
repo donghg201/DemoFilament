@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->date('Incorp_Date')->nullable();
             $table->string('Name')->unique();
+            $table->string('State_Id');
             $table->foreignId('Cust_Id')->constrained('Customer')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });

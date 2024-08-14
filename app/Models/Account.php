@@ -36,21 +36,21 @@ class Account extends Model
 
     public function customer()
     {
-        return $this->hasOne(Customer::class, 'Cust_Id');
+        return $this->hasMany(Customer::class, 'Cust_Id');
     }
 
     public function branch()
     {
-        return $this->hasOne(Branch::class, 'Branch_Id');
+        return $this->hasMany(Branch::class, 'Branch_Id');
     }
 
     public function employee()
     {
-        return $this->hasOne(Employee::class, 'Emp_Id');
+        return $this->hasMany(Employee::class, 'Emp_Id');
     }
 
     public function product()
     {
-        return $this->hasOne(Product::class, 'Product_Id');
+        return $this->hasMany(Product::class, 'Product_Id');
     }
 }

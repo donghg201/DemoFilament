@@ -22,4 +22,9 @@ class Branch extends Model
     {
         return $this->belongsTo(Account::class, 'Open_Branch_Id');
     }
+
+    public function accTransaction()
+    {
+        return $this->belongsTo(AccTransaction::class, 'Execution_Branch_Id');
+    }
 }

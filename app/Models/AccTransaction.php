@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Acc_Transaction extends Model
+class AccTransaction extends Model
 {
     use HasFactory;
 
@@ -23,5 +23,15 @@ class Acc_Transaction extends Model
     public function account()
     {
         return $this->belongsTo(Account::class, 'Account_Id');
+    }
+
+    public function branch()
+    {
+        return $this->hasMany(Branch::class, 'Branch_Id');
+    }
+
+    public function employee()
+    {
+        return $this->hasMany(Employee::class, 'Emp_Id');
     }
 }

@@ -6,9 +6,13 @@ use App\Filament\Resources\BusinessResource\Pages;
 use App\Filament\Resources\BusinessResource\RelationManagers;
 use App\Models\Business;
 use Filament\Forms;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -25,7 +29,20 @@ class BusinessResource extends Resource
     {
         return $form
             ->schema([
-                //
+                TextInput::make('Name')
+                    ->required(),
+                DatePicker::make('Incorp_Date')
+                    ->label('Incorp Date')
+                    ->native(false)
+                    ->closeOnDateSelection(),
+                TextInput::make('State_Id')
+                    ->required()
+                    ->label('State ID'),
+                Select::make('Cust_Id')
+                    ->label('Customer ID')
+                    ->relationship(name: 'Customer', titleAttribute: 'Cust_Id')
+                    ->required()
+                    ->native(false),
             ]);
     }
 
@@ -33,13 +50,21 @@ class BusinessResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('Name'),
+                TextColumn::make('Incorp_Date')
+                    ->label('Incorp Date')
+                    ->date(),
+                TextColumn::make('State_Id')
+                    ->label('State ID'),
+                TextColumn::make('Cust_Id')
+                    ->label('Customer ID'),
             ])
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\ACtions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

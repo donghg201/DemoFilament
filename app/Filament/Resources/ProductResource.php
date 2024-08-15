@@ -6,9 +6,13 @@ use App\Filament\Resources\ProductResource\Pages;
 use App\Filament\Resources\ProductResource\RelationManagers;
 use App\Models\Product;
 use Filament\Forms;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -25,7 +29,26 @@ class ProductResource extends Resource
     {
         return $form
             ->schema([
-                //
+                TextInput::make('Product_Id')
+                    ->label('Product ID')
+                    ->required(),
+                TextInput::make('Name')
+                    ->required(),
+                DatePicker::make('Date_Offered')
+                    ->label('Date Offered')
+                    ->native(false)
+                    ->closeOnDateSelection()
+                    ->prefix('Starts'),
+                DatePicker::make('Date_Retired')
+                    ->label('Date Offered')
+                    ->native(false)
+                    ->closeOnDateSelection()
+                    ->prefix('Ends'),
+                Select::make('Product_Type_Id')
+                    ->relationship(name: 'ProductType', titleAttribute: 'Name')
+                    ->label('Product Type ID')
+                    ->required()
+                    ->native(false),
             ]);
     }
 
@@ -33,13 +56,24 @@ class ProductResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('Product_Id')
+                    ->label('ID'),
+                TextColumn::make('Name'),
+                TextColumn::make('Date_Offered')
+                    ->date()
+                    ->label('Date Offered'),
+                TextColumn::make('Date_Retired')
+                    ->label('Date Retired')
+                    ->date(),
+                TextColumn::make('Product_Type_Id')
+                    ->label('Product Type ID'),
             ])
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\ACtions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

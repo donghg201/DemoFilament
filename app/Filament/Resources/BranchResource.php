@@ -27,12 +27,15 @@ class BranchResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('Branch_Id'),
-                TextInput::make('Name'),
+                TextInput::make('Branch_Id')
+                    ->required(),
+                TextInput::make('Name')
+                    ->required(),
                 TextInput::make('Address'),
                 TextInput::make('City'),
                 TextInput::make('State'),
-                TextInput::make('Zip_Code'),
+                TextInput::make('Zip_Code')
+                    ->label('Zip Code'),
             ]);
     }
 
@@ -45,7 +48,8 @@ class BranchResource extends Resource
                 TextColumn::make('Address'),
                 TextColumn::make('City'),
                 TextColumn::make('State'),
-                TextColumn::make('Zip_Code'),
+                TextColumn::make('Zip_Code')
+                    ->label('Zip Code'),
             ])
             ->filters([
                 //

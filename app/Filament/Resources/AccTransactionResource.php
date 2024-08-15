@@ -28,12 +28,15 @@ class AccTransactionResource extends Resource
                 TextInput::make('Txn_Id')->label('Txn ID')->required(),
                 TextInput::make('Amount')
                     ->integer()
+                    ->required()
                     ->minValue(0),
                 DatePicker::make('Funds_Avail_Date')
                     ->native(false)
+                    ->required()
                     ->closeOnDateSelection(),
                 DatePicker::make('Txn_Date')
                     ->native(false)
+                    ->required()
                     ->closeOnDateSelection(),
                 Select::make('Account_Id')
                     ->relationship(name: 'Account', titleAttribute: 'Account_Id')
@@ -54,18 +57,25 @@ class AccTransactionResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('Txn_Id'),
+                TextColumn::make('Txn_Id')
+                    ->label('ID'),
                 TextColumn::make('Amount')
                     ->numeric(decimalPlaces: 2)
                     ->money('USD'),
                 TextColumn::make('Funds_Avail_Date')
+                    ->label('Funds Available Date')
                     ->date(),
                 TextColumn::make('Txn_Date')
-                    ->date(),
-                TextColumn::make('Txn_Type_Id'),
-                TextColumn::make('Account_Id'),
-                TextColumn::make('Execution_Branch_Id'),
-                TextColumn::make('Teller_Emp_Id'),
+                    ->date()
+                    ->label('Txn Date'),
+                TextColumn::make('Txn_Type_Id')
+                    ->label('Txn Type ID'),
+                TextColumn::make('Account_Id')
+                    ->label('Account ID'),
+                TextColumn::make('Execution_Branch_Id')
+                    ->label('Branch ID'),
+                TextColumn::make('Teller_Emp_Id')
+                    ->label('Employee ID'),
             ])
             ->filters([
                 //

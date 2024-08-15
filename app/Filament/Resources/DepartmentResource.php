@@ -6,9 +6,11 @@ use App\Filament\Resources\DepartmentResource\Pages;
 use App\Filament\Resources\DepartmentResource\RelationManagers;
 use App\Models\Department;
 use Filament\Forms;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -25,7 +27,11 @@ class DepartmentResource extends Resource
     {
         return $form
             ->schema([
-                //
+                TextInput::make('Dept_Id')
+                    ->label('Department ID')
+                    ->required(),
+                TextInput::make('Name')
+                    ->required(),
             ]);
     }
 
@@ -33,13 +39,16 @@ class DepartmentResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('Dept_Id')
+                    ->label('ID'),
+                TextColumn::make('Name'),
             ])
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\ACtions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

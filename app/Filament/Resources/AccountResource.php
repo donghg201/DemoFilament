@@ -32,7 +32,8 @@ class AccountResource extends Resource
                 DatePicker::make('Open_Date')
                     ->native(false)
                     ->closeOnDateSelection()
-                    ->prefix('Starts'),
+                    ->prefix('Starts')
+                    ->required(),
                 DatePicker::make('Close_Date')
                     ->native(false)
                     ->closeOnDateSelection()
@@ -78,25 +79,35 @@ class AccountResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('Account_Id'),
+                TextColumn::make('Account_Id')
+                    ->label('ID'),
                 TextColumn::make('Last_Activity_Date')
-                    ->date(),
+                    ->date()
+                    ->label('Last Activity Date'),
                 TextColumn::make('Open_Date')
-                    ->date(),
+                    ->date()
+                    ->label('Open Date'),
                 TextColumn::make('Close_Date')
-                    ->date(),
+                    ->date()
+                    ->label('Close Date'),
                 TextColumn::make('Avail_Balance')
                     ->numeric(decimalPlaces: 2)
-                    ->money('USD'),
+                    ->money('USD')
+                    ->label('Available Balance'),
                 TextColumn::make('Pending_Balance')
                     ->numeric(decimalPlaces: 2)
-                    ->money('USD'),
+                    ->money('USD')
+                    ->label('Pending Balance'),
                 TextColumn::make('Status'),
-                TextColumn::make('Cust_Id'),
-                TextColumn::make('Open_Branch_Id'),
+                TextColumn::make('Cust_Id')
+                    ->label('Customer ID'),
+                TextColumn::make('Open_Branch_Id')
+                    ->label('Branch ID'),
                 // ->getStateUsing(fn($record) => $record->Branch::class::Branch_Id::Name),
-                TextColumn::make('Open_Emp_Id'),
-                TextColumn::make('Product_Id'),
+                TextColumn::make('Open_Emp_Id')
+                    ->label('Employee ID'),
+                TextColumn::make('Product_Id')
+                    ->label('Product ID'),
             ])
             ->filters([
                 //

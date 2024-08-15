@@ -6,9 +6,11 @@ use App\Filament\Resources\ProductTypeResource\Pages;
 use App\Filament\Resources\ProductTypeResource\RelationManagers;
 use App\Models\ProductType;
 use Filament\Forms;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -25,7 +27,10 @@ class ProductTypeResource extends Resource
     {
         return $form
             ->schema([
-                //
+                TextInput::make('Product_Type_Id')
+                    ->label('ID')
+                    ->required(),
+                TextInput::make('Name'),
             ]);
     }
 
@@ -33,13 +38,16 @@ class ProductTypeResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('Product_Type_Id')
+                    ->label('ID'),
+                TextColumn::make('Name'),
             ])
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\ACtions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

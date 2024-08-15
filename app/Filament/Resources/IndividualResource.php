@@ -3,15 +3,15 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\IndividualResource\Pages;
-use App\Filament\Resources\IndividualResource\RelationManagers;
 use App\Models\Individual;
-use Filament\Forms;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class IndividualResource extends Resource
 {
@@ -25,7 +25,20 @@ class IndividualResource extends Resource
     {
         return $form
             ->schema([
-                //
+                TextInput::make('First_Name')
+                    ->label('First Name')
+                    ->required(),
+                TextInput::make('Last_Name')
+                    ->label('Last Name')
+                    ->required(),
+                DatePicker::make('Birthday')
+                    ->native(false)
+                    ->closeOnDateSelection(),
+                Select::make('Cust_Id')
+                    ->label('Customer ID')
+                    ->relationship(name: 'Customer', titleAttribute: 'Cust_Id')
+                    ->required()
+                    ->native(false),
             ]);
     }
 
@@ -33,13 +46,21 @@ class IndividualResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('First_Name')
+                    ->label('First Name'),
+                TextColumn::make('Last_Name')
+                    ->label('Last Name'),
+                TextColumn::make('Birthday')
+                    ->date(),
+                TextColumn::make('Cust_Id')
+                    ->label('Customer ID'),
             ])
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\ACtions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

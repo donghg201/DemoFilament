@@ -6,9 +6,11 @@ use App\Filament\Resources\CustomerResource\Pages;
 use App\Filament\Resources\CustomerResource\RelationManagers;
 use App\Models\Customer;
 use Filament\Forms;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -25,7 +27,20 @@ class CustomerResource extends Resource
     {
         return $form
             ->schema([
-                //
+                TextInput::make('Cust_Id')
+                    ->label('Customer ID')
+                    ->required(),
+                TextInput::make('Address'),
+                TextInput::make('City'),
+                TextInput::make('Cust_Type_Id')
+                    ->label('Customer Type ID')
+                    ->required(),
+                TextInput::make('Fed_Id')
+                    ->required()
+                    ->label('Fed ID'),
+                TextInput::make('Postal_Code')
+                    ->label('Postal Code'),
+                TextInput::make('State'),
             ]);
     }
 
@@ -33,13 +48,24 @@ class CustomerResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('Cust_Id')
+                    ->label('ID'),
+                TextColumn::make('Address'),
+                TextColumn::make('City'),
+                TextColumn::make('Cust_Type_Id')
+                    ->label('Cust Type Id'),
+                TextColumn::make('Fed_Id')
+                    ->label('Fed ID'),
+                TextColumn::make('Postal_Code')
+                    ->label('Postal Code'),
+                TextColumn::make('State'),
             ])
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\ACtions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

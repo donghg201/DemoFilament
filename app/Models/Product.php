@@ -22,8 +22,8 @@ class Product extends Model
         return $this->belongsTo(Account::class, 'Product_Id');
     }
 
-    public function productId()
+    public function productType()
     {
-        return $this->hasMany(Product_Type::class, 'Product_Type_Id');
+        return $this->hasMany(ProductType::class, 'Product_Type_Id');
     }
 }

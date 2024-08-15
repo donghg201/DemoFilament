@@ -35,4 +35,9 @@ class Employee extends Model
     {
         return $this->hasMany(Department::class, 'Dept_Id');
     }
+
+    public function branch()
+    {
+        return $this->hasMany(Branch::class, 'Branch_Id');
+    }
 }

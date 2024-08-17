@@ -21,15 +21,18 @@ class BusinessResource extends Resource
 {
     protected static ?string $model = Business::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-s-user-circle';
 
     protected static ?string $navigationGroup = 'Customer';
+
+    protected static ?string $recordTitleAttribute = 'Name';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 TextInput::make('Name')
+                    ->maxLength(225)
                     ->required(),
                 DatePicker::make('Incorp_Date')
                     ->label('Incorp Date')
@@ -37,12 +40,15 @@ class BusinessResource extends Resource
                     ->closeOnDateSelection(),
                 TextInput::make('State_Id')
                     ->required()
-                    ->label('State ID'),
+                    ->label('State ID')
+                    ->maxLength(50),
                 Select::make('Cust_Id')
                     ->label('Customer ID')
                     ->relationship(name: 'Customer', titleAttribute: 'Cust_Id')
                     ->required()
-                    ->native(false),
+                    ->native(false)
+                    ->searchable()
+                    ->preload(),
             ]);
     }
 
@@ -50,19 +56,28 @@ class BusinessResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('Name'),
+                TextColumn::make('Name')
+                    ->sortable()
+                    ->searchable(),
                 TextColumn::make('Incorp_Date')
                     ->label('Incorp Date')
-                    ->date(),
+                    ->sortable()
+                    ->date()
+                    ->searchable(),
                 TextColumn::make('State_Id')
-                    ->label('State ID'),
-                TextColumn::make('Cust_Id')
-                    ->label('Customer ID'),
-            ])
+                    ->label('State ID')
+                    ->sortable()
+                    ->searchable(),
+                // TextColumn::make('Cust_Id')
+                //     ->sortable()
+                //     ->searchable()
+                //     ->label('Customer ID'),
+            ])->defaultSort('Name')
             ->filters([
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\ACtions\DeleteAction::make(),
             ])

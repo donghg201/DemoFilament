@@ -19,28 +19,36 @@ class CustomerResource extends Resource
 {
     protected static ?string $model = Customer::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-c-user-group';
 
     protected static ?string $navigationGroup = 'Customer';
+
+    protected static ?string $recordTitleAttribute = 'Address';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 TextInput::make('Cust_Id')
+                    ->numeric()
                     ->label('Customer ID')
                     ->required(),
-                TextInput::make('Address'),
-                TextInput::make('City'),
+                TextInput::make('Address')
+                    ->maxLength(225),
+                TextInput::make('City')
+                    ->maxLength(225),
                 TextInput::make('Cust_Type_Id')
                     ->label('Customer Type ID')
                     ->required(),
                 TextInput::make('Fed_Id')
                     ->required()
-                    ->label('Fed ID'),
+                    ->label('Fed ID')
+                    ->maxLength(50),
                 TextInput::make('Postal_Code')
-                    ->label('Postal Code'),
-                TextInput::make('State'),
+                    ->label('Postal Code')
+                    ->maxLength(50),
+                TextInput::make('State')
+                    ->maxLength(225),
             ]);
     }
 
@@ -49,21 +57,37 @@ class CustomerResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('Cust_Id')
-                    ->label('ID'),
-                TextColumn::make('Address'),
-                TextColumn::make('City'),
-                TextColumn::make('Cust_Type_Id')
-                    ->label('Cust Type Id'),
-                TextColumn::make('Fed_Id')
-                    ->label('Fed ID'),
+                    ->label('ID')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('Address')
+                    ->sortable()
+                    ->limit(40)
+                    ->searchable(),
+                TextColumn::make('City')
+                    ->sortable()
+                    ->searchable(),
+                // TextColumn::make('Cust_Type_Id')
+                //     ->sortable()
+                //     ->searchable()
+                //     ->label('Cust Type Id'),
+                // TextColumn::make('Fed_Id')
+                //     ->sortable()
+                //     ->searchable()
+                //     ->label('Fed ID'),
                 TextColumn::make('Postal_Code')
+                    ->sortable()
+                    ->searchable()
                     ->label('Postal Code'),
-                TextColumn::make('State'),
-            ])
+                TextColumn::make('State')
+                    ->sortable()
+                    ->searchable(),
+            ])->defaultSort('Cust_Id')
             ->filters([
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\ACtions\DeleteAction::make(),
             ])

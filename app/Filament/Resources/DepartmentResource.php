@@ -19,19 +19,23 @@ class DepartmentResource extends Resource
 {
     protected static ?string $model = Department::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-home-modern';
 
     protected static ?string $navigationGroup = 'Employee';
+
+    protected static ?string $recordTitleAttribute = 'Name';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 TextInput::make('Dept_Id')
+                    ->numeric()
                     ->label('Department ID')
                     ->required(),
                 TextInput::make('Name')
-                    ->required(),
+                    ->required()
+                    ->maxLength(225),
             ]);
     }
 
@@ -40,13 +44,18 @@ class DepartmentResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('Dept_Id')
-                    ->label('ID'),
-                TextColumn::make('Name'),
-            ])
+                    ->label('ID')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('Name')
+                    ->sortable()
+                    ->searchable(),
+            ])->defaultSort('Dept_Id')
             ->filters([
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\ACtions\DeleteAction::make(),
             ])

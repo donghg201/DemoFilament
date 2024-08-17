@@ -21,19 +21,23 @@ class ProductResource extends Resource
 {
     protected static ?string $model = Product::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-building-storefront';
 
     protected static ?string $navigationGroup = 'Product';
+
+    protected static ?string $recordTitleAttribute = 'Name';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 TextInput::make('Product_Id')
+                    ->numeric()
                     ->label('Product ID')
                     ->required(),
                 TextInput::make('Name')
-                    ->required(),
+                    ->required()
+                    ->maxLength(225),
                 DatePicker::make('Date_Offered')
                     ->label('Date Offered')
                     ->native(false)
@@ -48,7 +52,9 @@ class ProductResource extends Resource
                     ->relationship(name: 'ProductType', titleAttribute: 'Name')
                     ->label('Product Type ID')
                     ->required()
-                    ->native(false),
+                    ->native(false)
+                    ->searchable()
+                    ->preload(),
             ]);
     }
 
@@ -57,21 +63,32 @@ class ProductResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('Product_Id')
-                    ->label('ID'),
-                TextColumn::make('Name'),
+                    ->label('ID')
+                    ->sortable()
+                    ->searchable(),
+                TextColumn::make('Name')
+                    ->sortable()
+                    ->searchable(),
                 TextColumn::make('Date_Offered')
                     ->date()
+                    ->searchable()
+                    ->sortable()
                     ->label('Date Offered'),
                 TextColumn::make('Date_Retired')
                     ->label('Date Retired')
+                    ->sortable()
+                    ->searchable()
                     ->date(),
                 TextColumn::make('Product_Type_Id')
+                    ->sortable()
+                    ->searchable()
                     ->label('Product Type ID'),
-            ])
+            ])->defaultSort('Product_Id')
             ->filters([
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\ACtions\DeleteAction::make(),
             ])

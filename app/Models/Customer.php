@@ -26,11 +26,11 @@ class Customer extends Model
 
     public function business()
     {
-        return $this->hasMany(Customer::class, 'Cust_Id');
+        return $this->hasMany(Business::class, 'Cust_Id');
     }
     public function individual()
 
     {
-        return $this->hasMany(Customer::class, 'Cust_Id');
+        return $this->hasMany(Individual::class, 'Cust_Id');
     }
 }

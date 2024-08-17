@@ -19,18 +19,22 @@ class ProductTypeResource extends Resource
 {
     protected static ?string $model = ProductType::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-tag';
 
     protected static ?string $navigationGroup = 'Product';
+
+    protected static ?string $recordTitleAttribute = 'Name';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 TextInput::make('Product_Type_Id')
+                    ->numeric()
                     ->label('ID')
                     ->required(),
-                TextInput::make('Name'),
+                TextInput::make('Name')
+                    ->maxLength(225),
             ]);
     }
 
@@ -39,13 +43,18 @@ class ProductTypeResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('Product_Type_Id')
-                    ->label('ID'),
-                TextColumn::make('Name'),
-            ])
+                    ->label('ID')
+                    ->sortable()
+                    ->searchable(),
+                TextColumn::make('Name')
+                    ->sortable()
+                    ->searchable(),
+            ])->defaultSort('Product_Type_Id')
             ->filters([
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\ACtions\DeleteAction::make(),
             ])

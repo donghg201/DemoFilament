@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Employee extends Model
 {
@@ -31,12 +32,12 @@ class Employee extends Model
         return $this->belongsTo(AccTransaction::class, 'Teller_Emp_Id');
     }
 
-    public function department()
+    public function department(): HasMany
     {
         return $this->hasMany(Department::class, 'Dept_Id');
     }
 
-    public function branch()
+    public function branch(): HasMany
     {
         return $this->hasMany(Branch::class, 'Branch_Id');
     }

@@ -17,19 +17,24 @@ class IndividualResource extends Resource
 {
     protected static ?string $model = Individual::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-s-user-circle';
 
     protected static ?string $navigationGroup = 'Customer';
+
+    protected static ?string $recordTitleAttribute = 'First_Name';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 TextInput::make('First_Name')
+                    ->numeric()
                     ->label('First Name')
-                    ->required(),
+                    ->required()
+                    ->maxLength(225),
                 TextInput::make('Last_Name')
                     ->label('Last Name')
+                    ->maxLength(225)
                     ->required(),
                 DatePicker::make('Birthday')
                     ->native(false)
@@ -38,7 +43,9 @@ class IndividualResource extends Resource
                     ->label('Customer ID')
                     ->relationship(name: 'Customer', titleAttribute: 'Cust_Id')
                     ->required()
-                    ->native(false),
+                    ->native(false)
+                    ->searchable()
+                    ->preload(),
             ]);
     }
 
@@ -47,18 +54,27 @@ class IndividualResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('First_Name')
-                    ->label('First Name'),
+                    ->label('First Name')
+                    ->sortable()
+                    ->searchable(),
                 TextColumn::make('Last_Name')
-                    ->label('Last Name'),
+                    ->label('Last Name')
+                    ->sortable()
+                    ->searchable(),
                 TextColumn::make('Birthday')
-                    ->date(),
-                TextColumn::make('Cust_Id')
-                    ->label('Customer ID'),
-            ])
+                    ->date()
+                    ->searchable()
+                    ->sortable(),
+                // TextColumn::make('Cust_Id')
+                //     ->label('Customer ID')
+                //     ->sortable()
+                //     ->searchable(),
+            ])->defaultSort('First_Name')
             ->filters([
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\ACtions\DeleteAction::make(),
             ])

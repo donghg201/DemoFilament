@@ -13,29 +13,38 @@ use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class BranchResource extends Resource
 {
     protected static ?string $model = Branch::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-shopping-bag';
 
     protected static ?string $navigationGroup = 'Branch';
+
+    protected static ?string $recordTitleAttribute = 'Name';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 TextInput::make('Branch_Id')
+                    ->numeric()
                     ->required(),
                 TextInput::make('Name')
-                    ->required(),
-                TextInput::make('Address'),
-                TextInput::make('City'),
-                TextInput::make('State'),
+                    ->required()
+                    ->maxLength(225),
+                TextInput::make('Address')
+                    ->maxLength(225),
+                TextInput::make('City')
+                    ->maxLength(225),
+                TextInput::make('State')
+                    ->maxLength(225),
                 TextInput::make('Zip_Code')
-                    ->label('Zip Code'),
+                    ->label('Zip Code')
+                    ->maxLength(50),
             ]);
     }
 
@@ -43,18 +52,33 @@ class BranchResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('Branch_Id')->label('ID'),
-                TextColumn::make('Name'),
-                TextColumn::make('Address'),
-                TextColumn::make('City'),
-                TextColumn::make('State'),
+                TextColumn::make('Branch_Id')->label('ID')
+                    ->sortable()
+                    ->searchable(),
+                TextColumn::make('Name')
+                    ->sortable()
+                    ->searchable()
+                    ->limit(30),
+                TextColumn::make('Address')
+                    ->sortable()
+                    ->searchable()
+                    ->limit(50),
+                // TextColumn::make('City')
+                //     ->sortable()
+                //     ->searchable(),
+                // TextColumn::make('State')
+                //     ->sortable()
+                //     ->searchable(),
                 TextColumn::make('Zip_Code')
-                    ->label('Zip Code'),
-            ])
+                    ->label('Zip Code')
+                    ->sortable()
+                    ->searchable(),
+            ])->defaultSort('Branch_Id')
             ->filters([
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\ACtions\DeleteAction::make(),
             ])

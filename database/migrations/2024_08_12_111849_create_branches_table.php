@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('Name');
             $table->string('State')->nullable();
             $table->string('Zip_Code')->nullable();
+            $table->foreignId('Emp_Id')->constrained()->nullable();
             $table->timestamps();
         });
     }

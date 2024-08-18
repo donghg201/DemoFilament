@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('Dept_Id')->unique();
             $table->string('Name');
+            $table->foreignId('Emp_Id')->constrained()->nullable();
             $table->timestamps();
         });
     }

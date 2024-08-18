@@ -17,8 +17,8 @@ class Employee extends Model
         'Last_Name',
         'Start_Date',
         'Title',
-        'Assigned_Branch_Id',
-        'Dept_Id',
+        // 'Assigned_Branch_Id',
+        // 'Dept_Id',
         'Superior_Emp_Id',
     ];
 
@@ -34,11 +34,11 @@ class Employee extends Model
 
     public function department(): HasMany
     {
-        return $this->hasMany(Department::class, 'Dept_Id');
+        return $this->hasMany(Department::class, 'Emp_Id');
     }
 
     public function branch(): HasMany
     {
-        return $this->hasMany(Branch::class, 'Branch_Id');
+        return $this->hasMany(Branch::class, 'Emp_Id');
     }
 }

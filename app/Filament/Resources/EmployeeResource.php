@@ -3,12 +3,18 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\EmployeeResource\Pages;
+use App\Filament\Resources\EmployeeResource\RelationManagers\BranchRelationManager;
+use App\Filament\Resources\EmployeeResource\RelationManagers\DepartmentRelationManager;
+use App\Filament\Resources\EmployeeResource\RelationManagers\EmployeeRelationManager;
 use App\Models\Employee;
 use Illuminate\Support\Carbon;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Form;
+use Filament\Forms;
+use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
@@ -16,7 +22,6 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Model;
 
 class EmployeeResource extends Resource
 {
@@ -28,52 +33,131 @@ class EmployeeResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'First_Name';
 
+    // public static function form(Form $form): Form
+    // {
+    //     return $form
+    //         ->schema([
+    //             TextInput::make('Emp_Id')
+    //                 ->numeric()
+    //                 ->label('Employee ID')
+    //                 ->required(),
+    //             TextInput::make('Title')
+    //                 ->label('Title')
+    //                 ->maxLength(225),
+    //             TextInput::make('First_Name')
+    //                 ->label('First Name')
+    //                 ->required()
+    //                 ->maxLength(225),
+    //             TextInput::make('Last_Name')
+    //                 ->label('Last Name')
+    //                 ->required()
+    //                 ->maxLength(225),
+    //             DatePicker::make('Start_Date')
+    //                 ->label('Start Date')
+    //                 ->native(false)
+    //                 ->closeOnDateSelection()
+    //                 ->prefix('Starts')
+    //                 ->required(),
+    //             DatePicker::make('End_Date')
+    //                 ->label('End Date')
+    //                 ->native(false)
+    //                 ->closeOnDateSelection()
+    //                 ->prefix('Ends'),
+    //             Select::make('Assigned_Branch_Id')
+    //                 ->label('Branch ID')
+    //                 ->relationship(name: 'Branch', titleAttribute: 'Name')
+    //                 ->required()
+    //                 ->native(false)
+    //                 ->searchable()
+    //                 ->preload(),
+    //             Select::make('Dept_Id')
+    //                 ->label('Department ID')
+    //                 ->relationship(name: 'Department', titleAttribute: 'Name')
+    //                 ->required()
+    //                 ->native(false)
+    //                 ->searchable()
+    //                 ->preload(),
+    //             TextInput::make('Superior_Emp_Id')
+    //                 ->label('Superior Employee ID'),
+    //         ]);
+    // }
+
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
-                TextInput::make('Emp_Id')
-                    ->numeric()
-                    ->label('Employee ID')
-                    ->required(),
-                TextInput::make('Title')
-                    ->label('Title')
-                    ->maxLength(225),
-                TextInput::make('First_Name')
-                    ->label('First Name')
-                    ->required()
-                    ->maxLength(225),
-                TextInput::make('Last_Name')
-                    ->label('Last Name')
-                    ->required()
-                    ->maxLength(225),
-                DatePicker::make('Start_Date')
-                    ->label('Start Date')
-                    ->native(false)
-                    ->closeOnDateSelection()
-                    ->prefix('Starts')
-                    ->required(),
-                DatePicker::make('End_Date')
-                    ->label('End Date')
-                    ->native(false)
-                    ->closeOnDateSelection()
-                    ->prefix('Ends'),
-                Select::make('Assigned_Branch_Id')
-                    ->label('Branch ID')
-                    ->relationship(name: 'Branch', titleAttribute: 'Name')
-                    ->required()
-                    ->native(false)
-                    ->searchable()
-                    ->preload(),
-                Select::make('Dept_Id')
-                    ->label('Department ID')
-                    ->relationship(name: 'Department', titleAttribute: 'Name')
-                    ->required()
-                    ->native(false)
-                    ->searchable()
-                    ->preload(),
-                TextInput::make('Superior_Emp_Id')
-                    ->label('Superior Employee ID'),
+            ->schema(
+                [
+                    Section::make('Employee Details')
+                        ->schema([
+                            TextInput::make('Emp_Id')
+                                ->numeric()
+                                ->label('Employee ID')
+                                ->required(),
+                            TextInput::make('Title')
+                                ->label('Title')
+                                ->maxLength(225),
+                            TextInput::make('First_Name')
+                                ->label('First Name')
+                                ->required()
+                                ->maxLength(225),
+                            TextInput::make('Last_Name')
+                                ->label('Last Name')
+                                ->required()
+                                ->maxLength(225),
+                        ])->columnSpan(2)->columns(2),
+
+                    Section::make('Time Modified')
+                        ->schema([
+                            Placeholder::make('created_at')
+                                ->label('Created At')
+                                ->content(fn(Employee $emp): ?string => $emp->created_at?->isoFormat('LL')),
+                            Placeholder::make('updated_at')
+                                ->label('Updated At')
+                                ->content(fn(Employee $emp): ?string => $emp->updated_at?->isoFormat('LL')),
+                        ])
+                        ->hidden(fn(string $operation): bool => $operation === 'create')
+                        ->columnSpan(1),
+
+                    Section::make('Date')
+                        ->schema([
+                            DatePicker::make('Start_Date')
+                                ->label('Start Date')
+                                ->native(false)
+                                ->closeOnDateSelection()
+                                ->prefix('Starts')
+                                ->required(),
+                            DatePicker::make('End_Date')
+                                ->label('End Date')
+                                ->native(false)
+                                ->closeOnDateSelection()
+                                ->prefix('Ends'),
+                        ])->columnSpan(2),
+                    // Section::make('Relation')
+                    //     ->schema([
+                    //         Select::make('Assigned_Branch_Id')
+                    //             ->label('Branch ID')
+                    //             ->relationship(name: 'Branch', titleAttribute: 'Name')
+                    //             ->required()
+                    //             ->native(false)
+                    //             ->searchable()
+                    //             ->preload(),
+                    //         Select::make('Dept_Id')
+                    //             ->label('Department ID')
+                    //             ->relationship(name: 'Department', titleAttribute: 'Name')
+                    //             ->required()
+                    //             ->native(false)
+                    //             ->searchable()
+                    //             ->preload(),
+                    //         TextInput::make('Superior_Emp_Id')
+                    //             ->label('Superior Employee ID'),
+                    //     ])->columnSpan(2)->columns(2),
+                ]
+            )->columns([
+                'default' => 1,
+                'md' => 1,
+                'lg' => 2,
+                'xl' => 2,
+                '2xl' => 3,
             ]);
     }
 
@@ -172,7 +256,8 @@ class EmployeeResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            BranchRelationManager::class,
+            DepartmentRelationManager::class,
         ];
     }
 

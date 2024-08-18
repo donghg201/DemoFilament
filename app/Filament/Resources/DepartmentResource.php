@@ -6,6 +6,7 @@ use App\Filament\Resources\DepartmentResource\Pages;
 use App\Filament\Resources\DepartmentResource\RelationManagers;
 use App\Models\Department;
 use Filament\Forms;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -36,6 +37,12 @@ class DepartmentResource extends Resource
                 TextInput::make('Name')
                     ->required()
                     ->maxLength(225),
+                Select::make('Emp_Id')
+                    ->relationship(name: 'Employee', titleAttribute: 'First_Name')
+                    ->required()
+                    ->native(false)
+                    ->searchable()
+                    ->preload(),
             ]);
     }
 

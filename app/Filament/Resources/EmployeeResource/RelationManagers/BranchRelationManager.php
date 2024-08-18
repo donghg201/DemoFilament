@@ -1,33 +1,19 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Resources\EmployeeResource\RelationManagers;
 
-use App\Filament\Resources\BranchResource\Pages;
-use App\Filament\Resources\BranchResource\RelationManagers;
-use App\Models\Branch;
-use Filament\Forms;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
-use Filament\Resources\Resource;
+use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class BranchResource extends Resource
+class BranchRelationManager extends RelationManager
 {
-    protected static ?string $model = Branch::class;
+    protected static string $relationship = 'Branch';
 
-    protected static ?string $navigationIcon = 'heroicon-o-shopping-bag';
-
-    protected static ?string $navigationGroup = 'Branch';
-
-    protected static ?string $recordTitleAttribute = 'Name';
-
-    public static function form(Form $form): Form
+    public function form(Form $form): Form
     {
         return $form
             ->schema([
@@ -46,20 +32,16 @@ class BranchResource extends Resource
                 TextInput::make('Zip_Code')
                     ->label('Zip Code')
                     ->maxLength(50),
-                Select::make('Emp_Id')
-                    ->relationship(name: 'Employee', titleAttribute: 'First_Name')
-                    ->required()
-                    ->native(false)
-                    ->searchable()
-                    ->preload(),
             ]);
     }
 
-    public static function table(Table $table): Table
+    public function table(Table $table): Table
     {
         return $table
+            ->recordTitleAttribute('Name')
             ->columns([
-                TextColumn::make('Branch_Id')->label('ID')
+                TextColumn::make('Branch_Id')
+                    ->label('ID')
                     ->sortable()
                     ->searchable(),
                 TextColumn::make('Name')
@@ -70,12 +52,12 @@ class BranchResource extends Resource
                     ->sortable()
                     ->searchable()
                     ->limit(50),
-                // TextColumn::make('City')
-                //     ->sortable()
-                //     ->searchable(),
-                // TextColumn::make('State')
-                //     ->sortable()
-                //     ->searchable(),
+                TextColumn::make('City')
+                    ->sortable()
+                    ->searchable(),
+                TextColumn::make('State')
+                    ->sortable()
+                    ->searchable(),
                 TextColumn::make('Zip_Code')
                     ->label('Zip Code')
                     ->sortable()
@@ -83,6 +65,9 @@ class BranchResource extends Resource
             ])->defaultSort('Branch_Id')
             ->filters([
                 //
+            ])
+            ->headerActions([
+                Tables\Actions\CreateAction::make(),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
@@ -94,21 +79,5 @@ class BranchResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
-    }
-
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
-
-    public static function getPages(): array
-    {
-        return [
-            'index' => Pages\ListBranches::route('/'),
-            'create' => Pages\CreateBranch::route('/create'),
-            'edit' => Pages\EditBranch::route('/{record}/edit'),
-        ];
     }
 }

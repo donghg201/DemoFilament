@@ -19,9 +19,8 @@ return new class extends Migration
             $table->string('Last_Name');
             $table->date('Start_Date');
             $table->string('Title')->nullable();
-            $table->integer('Assigned_Branch_Id')->constrained('Branch');
-            // $table->integer('Dept_Id');
-            $table->foreignId('Dept_Id')->constrained('Department');
+            // $table->foreignId('Assigned_Branch_Id')->constrained('Branch');
+            // $table->foreignId('Dept_Id')->constrained('Department');
             $table->integer('Superior_Emp_Id')->nullable();
             $table->timestamps();
         });

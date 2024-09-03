@@ -4,7 +4,6 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\AccountResource\Pages;
 use App\Models\Account;
-use App\Models\Branch;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -13,7 +12,6 @@ use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Forms\Components\DatePicker;
-use Filament\Tables\Filters\SelectFilter;
 
 class AccountResource extends Resource
 {
@@ -22,6 +20,16 @@ class AccountResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-user-circle';
 
     protected static ?string $navigationGroup = 'Account';
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+
+    public static function getNavigationBadgeColor(): string|array|null
+    {
+        return 'info';
+    }
 
     public static function form(Form $form): Form
     {

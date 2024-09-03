@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\EmployeeResource\Pages;
 
 use App\Filament\Resources\EmployeeResource;
+use App\Models\Employee;
 use Filament\Resources\Pages\CreateRecord;
 use Filament\Notifications\Notification;
 use Filament\Notifications\Actions\Action;
@@ -10,6 +11,11 @@ use Filament\Notifications\Actions\Action;
 class CreateEmployee extends CreateRecord
 {
     protected static string $resource = EmployeeResource::class;
+
+    public function handle(Employee $emp): Employee
+    {
+        return $emp;
+    }
 
     protected function getCreatedNotification(): ?Notification
     {

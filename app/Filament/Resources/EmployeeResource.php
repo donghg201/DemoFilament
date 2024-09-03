@@ -5,15 +5,12 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\EmployeeResource\Pages;
 use App\Filament\Resources\EmployeeResource\RelationManagers\BranchRelationManager;
 use App\Filament\Resources\EmployeeResource\RelationManagers\DepartmentRelationManager;
-use App\Filament\Resources\EmployeeResource\RelationManagers\EmployeeRelationManager;
 use App\Models\Employee;
 use Illuminate\Support\Carbon;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Form;
-use Filament\Forms;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -32,6 +29,16 @@ class EmployeeResource extends Resource
     protected static ?string $navigationGroup = 'Employee';
 
     protected static ?string $recordTitleAttribute = 'First_Name';
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+
+    public static function getNavigationBadgeColor(): string|array|null
+    {
+        return 'info';
+    }
 
     // public static function form(Form $form): Form
     // {

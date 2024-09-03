@@ -3,9 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\BranchResource\Pages;
-use App\Filament\Resources\BranchResource\RelationManagers;
 use App\Models\Branch;
-use Filament\Forms;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -13,9 +11,6 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class BranchResource extends Resource
 {
@@ -26,6 +21,16 @@ class BranchResource extends Resource
     protected static ?string $navigationGroup = 'Branch';
 
     protected static ?string $recordTitleAttribute = 'Name';
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+
+    public static function getNavigationBadgeColor(): string|array|null
+    {
+        return 'info';
+    }
 
     public static function form(Form $form): Form
     {

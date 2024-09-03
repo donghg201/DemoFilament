@@ -3,17 +3,13 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ProductTypeResource\Pages;
-use App\Filament\Resources\ProductTypeResource\RelationManagers;
 use App\Models\ProductType;
-use Filament\Forms;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ProductTypeResource extends Resource
 {
@@ -24,6 +20,16 @@ class ProductTypeResource extends Resource
     protected static ?string $navigationGroup = 'Product';
 
     protected static ?string $recordTitleAttribute = 'Name';
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+
+    public static function getNavigationBadgeColor(): string|array|null
+    {
+        return 'info';
+    }
 
     public static function form(Form $form): Form
     {

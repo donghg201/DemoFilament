@@ -11,24 +11,23 @@ use Rap2hpoutre\FastExcel\FastExcel;
 
 class ExportController extends Controller
 {
-    // public function array()
-    // {
-    //     $handle = fopen(public_path('storage/export.csv'), 'w');
+    public function array()
+    {
+        $handle = fopen(public_path('users.csv'), 'w');
+        fputcsv($handle, ['ID', 'Name', 'Email']);
+        User::query()->lazyById(2000, 'id')->each(function ($user) use ($handle) {
+            fputcsv($handle, $user->only(['id', 'name', 'email']));
+        });
 
-    //     User::query()->lazyById(2000, 'id')
-    //         ->each(function ($user) use ($handle) {
-    //             fputcsv($handle, $user->toArray());
-    //         });
+        fclose($handle);
 
-    //     fclose($handle);
+        return response()->download(public_path('users.csv'));
+    }
 
-    //     return Storage::disk('public')->download('export.csv');
-    // }
-
-    // public function excel()
-    // {
-    //     return Excel::download(new UsersExport, 'users.csv');
-    // }
+    public function excel()
+    {
+        return Excel::download(new UsersExport, 'users.csv');
+    }
 
     public function spatie()
     {

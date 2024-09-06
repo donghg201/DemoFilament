@@ -16,7 +16,7 @@ Route::get('user/profile', [UserController::class, 'showProfile']);
 Route::post('user/profile', UpdatePassword::class)->name('update.profile');
 
 
-// Route::get('export/array', [ExportController::class, 'array'])->name('export.array');
-// Route::get('export/excel', [ExportController::class, 'excel'])->name('export.excel');
+Route::get('export/array', [ExportController::class, 'array'])->name('export.array');
+Route::get('export/excel', [ExportController::class, 'excel'])->name('export.excel');
 Route::get('export/spatie', [ExportController::class, 'spatie'])->name('export.spatie');
 Route::get('export/fast-excel', [ExportController::class, 'fastExcel'])->name('export.fast-excel');
